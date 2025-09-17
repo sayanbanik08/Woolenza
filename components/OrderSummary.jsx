@@ -126,11 +126,18 @@ const OrderSummary = () => {
           </div>
           <div className="flex justify-between">
             <p className="text-gray-600">Tax (2%)</p>
-            <p className="font-medium text-gray-800">{currency}{Math.floor(getCartAmount() * 0.02)}</p>
+            <p className="font-medium text-gray-800">{currency}{(() => {
+              const amt = Number(getCartAmount()) || 0;
+              return (Math.round(amt * 0.02 * 100) / 100).toFixed(2);
+            })()}</p>
           </div>
           <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
-            <p>{currency}{getCartAmount() + Math.floor(getCartAmount() * 0.02)}</p>
+            <p>{currency}{(() => {
+              const amt = Number(getCartAmount()) || 0;
+              const tax = Math.round(amt * 0.02 * 100) / 100;
+              return (Math.round((amt + tax) * 100) / 100).toFixed(2);
+            })()}</p>
           </div>
         </div>
       </div>

@@ -13,12 +13,19 @@ export async function POST(request) {
             return NextResponse.json({ success: false, message: "Invalid data" });
         }
 
-        // calculate amount using items 
-
-        const amount = await items.reduce(async (acc, item) => {
+        // calculate subtotal using items (avoid async reduce pitfalls)
+        let subtotal = 0;
+        for (const item of items) {
             const product = await Product.findById(item.product);
-            return acc + product.offerPrice * item.quantity;
-        }, 0)
+            if (!product) {
+                return NextResponse.json({ success: false, message: `Product not found: ${item.product}` });
+            }
+            subtotal += product.offerPrice * item.quantity;
+        }
+        // round to 2 decimals
+        subtotal = Math.round(subtotal * 100) / 100;
+        const tax = Math.round(subtotal * 0.02 * 100) / 100; // 2%
+        const total = Math.round((subtotal + tax) * 100) / 100;
 
         await inngest.send({
             name: 'Order/created',
@@ -26,7 +33,9 @@ export async function POST(request) {
                 userId,
                 address,
                 items,
-                amount: amount + Math.floor(amount * 0.02),
+                subtotal,
+                tax,
+                total,
                 date: Date.now()
             }
         })
