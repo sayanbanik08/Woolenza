@@ -1,4 +1,5 @@
-import logo from "./logo.svg";
+// logo.svg was missing; use Woolenza-Shop.jpg as the primary logo asset
+import woolenza_shop from "./Woolenza-Shop.jpg";
 import search_icon from "./search_icon.svg";
 import user_icon from "./user_icon.svg";
 import cart_icon from "./cart_icon.svg";
@@ -48,7 +49,9 @@ import product_details_page_apple_earphone_image4 from "./product_details_page_a
 import product_details_page_apple_earphone_image5 from "./product_details_page_apple_earphone_image5.png";
 
 export const assets = {
-  logo,
+  // keep `logo` key for backward compatibility with existing imports
+  logo: woolenza_shop,
+  woolenza_shop,
   search_icon,
   user_icon,
   cart_icon,
@@ -96,6 +99,8 @@ export const assets = {
   product_details_page_apple_earphone_image4,
   product_details_page_apple_earphone_image5,
   checkmark
+  ,
+  woolenza_shop
 };
 
 export const BagIcon = () => {
