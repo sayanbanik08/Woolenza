@@ -1,6 +1,7 @@
 import { inngest } from "@/config/inngest";
 import Product from "@/models/Product";
-import { getAuth, User } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
+import User from "@/models/user";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
@@ -28,7 +29,7 @@ export async function POST(request) {
         const total = Math.round((subtotal + tax) * 100) / 100;
 
         await inngest.send({
-            name: 'Order/created',
+            name: 'order/created',
             data: {
                 userId,
                 address,
@@ -36,6 +37,7 @@ export async function POST(request) {
                 subtotal,
                 tax,
                 total,
+                amount: total,
                 date: Date.now()
             }
         })
