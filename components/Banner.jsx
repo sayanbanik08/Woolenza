@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const Banner = () => {
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between md:pl-20 py-10 md:py-0 bg-[#E6E9F2] md:my-16 md:rounded-xl overflow-hidden">
+    <div className="flex flex-col md:flex-row items-center justify-between md:pl-20 py-10 md:py-0 bg-[#E6E9F2] my-8 md:my-16 md:rounded-xl overflow-hidden">
       <Image
         className="max-w-48 md:max-w-56"
         src={assets.bag}

@@ -14,7 +14,7 @@ const Home = () => {
         <HeaderSlider />
         <HomeProducts />
       </div>
-      <div className="md:px-6 md:px-16 lg:px-32">
+      <div className="px-0 md:px-16 lg:px-32">
         <Banner />
       </div>
       <Footer />

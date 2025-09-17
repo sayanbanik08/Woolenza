@@ -44,6 +44,9 @@ import boy_with_laptop_image from "./boy_with_laptop_image.png";
 import checkmark from "./checkmark.png";
 import hat from "./hat.png";
 import bag from "./bag.png";
+import girl from "./girl.png";
+import boy from "./boy.png";
+import cat from "./cat.png";
 import product_details_page_apple_earphone_image1 from "./product_details_page_apple_earphone_image1.png";
 import product_details_page_apple_earphone_image2 from "./product_details_page_apple_earphone_image2.png";
 import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
@@ -103,6 +106,9 @@ export const assets = {
   checkmark,
   hat,
   bag,
+  girl,
+  boy,
+  cat,
   woolenza_shop
 };
 

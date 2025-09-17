@@ -12,7 +12,7 @@ const Navbar = () => {
   const { openSignIn } = useClerk();
 
   return (
-    <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700">
+    <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-5 md:py-3 border-b border-gray-300 text-gray-700">
       <div className="cursor-pointer" onClick={() => router.push('/')}
         role="button" aria-label="Home">
         <Image
