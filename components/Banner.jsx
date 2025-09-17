@@ -29,8 +29,10 @@ const Banner = () => {
       />
       <Image
         className="md:hidden"
-        src={assets.sm_controller_image}
-        alt="sm_controller_image"
+        src={assets.bag}
+        alt="controller"
+        width={200}
+        height={200}
       />
     </div>
   );
