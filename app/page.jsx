@@ -13,6 +13,8 @@ const Home = () => {
       <div className="px-6 md:px-16 lg:px-32">
         <HeaderSlider />
         <HomeProducts />
+      </div>
+      <div className="md:px-6 md:px-16 lg:px-32">
         <Banner />
       </div>
       <Footer />
