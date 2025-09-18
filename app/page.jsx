@@ -10,11 +10,11 @@ const Home = () => {
   return (
     <>
       <Navbar/>
-      <div className="px-6 md:px-16 lg:px-32">
+      <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-32">
         <HeaderSlider />
         <HomeProducts />
       </div>
-      <div className="px-0 md:px-16 lg:px-32">
+      <div className="max-w-7xl mx-auto px-0 md:px-16 lg:px-32">
         <Banner />
       </div>
       <Footer />
