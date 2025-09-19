@@ -28,9 +28,6 @@ const Navbar = () => {
         <Link href="/" className="hover:text-gray-900 transition">
           Home
         </Link>
-        <Link href="/all-products" className="hover:text-gray-900 transition">
-          Shop
-        </Link>
         <Link href="/" className="hover:text-gray-900 transition">
           About Us
         </Link>
@@ -49,19 +46,23 @@ const Navbar = () => {
           alt="search icon"
           onClick={() => setShowSearch(!showSearch)}
         />
+        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full md:hidden">Seller Dashboard</button>}
         {user
           ? <>
           <UserButton >
-            <UserButton.MenuItems> 
+            <UserButton.MenuItems>
               <UserButton.Action label="Home" labelIcon={<HomeIcon />} onClick={()=>router.push('/')} />
+              <UserButton.Action label="All Products" labelIcon={<BoxIcon />} onClick={()=>router.push('/all-products')} />
             </UserButton.MenuItems>
-            <UserButton.MenuItems> 
-              <UserButton.Action label="Products" labelIcon={<BoxIcon />} onClick={()=>router.push('/all-products')} />
+            <UserButton.MenuItems>
+              <UserButton.Action label="Cotton Yarn" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/cotton-yarn')} />
+              <UserButton.Action label="Chenile Yarn" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/chenile-yarn')} />
+              <UserButton.Action label="Pure Merino wool" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/pure-merino-wool')} />
+              <UserButton.Action label="Cotton and Acrylic Blend" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/cotton-acrylic-blend')} />
+              <UserButton.Action label="Acrylic Yarn" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/acrylic-yarn')} />
             </UserButton.MenuItems>
-            <UserButton.MenuItems> 
+            <UserButton.MenuItems>
               <UserButton.Action label="cart" labelIcon={<CartIcon />} onClick={()=>router.push('/cart')} />
-            </UserButton.MenuItems>
-            <UserButton.MenuItems> 
               <UserButton.Action label="My Orders" labelIcon={<BagIcon />} onClick={()=>router.push('/my-orders')} />
             </UserButton.MenuItems>
           </UserButton>

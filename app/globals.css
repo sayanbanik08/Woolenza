@@ -17,3 +17,13 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.cl-userButtonPopoverActions {
+  max-height: 400px !important;
+  overflow-y: scroll !important;
+}
+
+.cl-userButtonPopoverFooter {
+  max-height: none !important;
+  overflow-y: visible !important;
+}
