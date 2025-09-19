@@ -4,6 +4,7 @@ import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { useAppContext } from "@/context/AppContext";
 
 const Cart = () => {
@@ -13,28 +14,28 @@ const Cart = () => {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col md:flex-row gap-10 px-6 md:px-16 lg:px-32 pt-14 mb-20">
+      <div className="flex flex-col md:flex-row gap-10 px-6 md:px-16 lg:px-32 pt-6 mb-20 max-w-[1280px] mx-auto">
         <div className="flex-1">
           <div className="flex items-center justify-between mb-8 border-b border-gray-500/30 pb-6">
-            <p className="text-2xl md:text-3xl text-gray-500">
+            <p className="text-3xl md:text-4xl lg:text-5xl text-gray-500">
               Your <span className="font-medium text-orange-600">Cart</span>
             </p>
             <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
           </div>
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
             <table className="min-w-full table-auto">
-              <thead className="text-left">
-                <tr>
-                  <th className="text-nowrap pb-6 md:px-4 px-1 text-gray-600 font-medium">
+              <thead className="text-left bg-gray-50/50">
+                <tr className="border-b border-gray-200">
+                  <th className="text-nowrap py-4 px-6 text-gray-700 font-semibold text-sm uppercase tracking-wide border-r border-gray-200">
                     Product Details
                   </th>
-                  <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="py-4 px-6 text-gray-700 font-semibold text-sm uppercase tracking-wide border-r border-gray-200">
                     Price
                   </th>
-                  <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="py-4 px-6 text-gray-700 font-semibold text-sm uppercase tracking-wide border-r border-gray-200">
                     Quantity
                   </th>
-                  <th className="pb-6 md:px-4 px-1 text-gray-600 font-medium">
+                  <th className="py-4 px-6 text-gray-700 font-semibold text-sm uppercase tracking-wide">
                     Subtotal
                   </th>
                 </tr>
@@ -46,8 +47,8 @@ const Cart = () => {
                   if (!product || cartItems[itemId] <= 0) return null;
 
                   return (
-                    <tr key={itemId}>
-                      <td className="flex items-center gap-4 py-4 md:px-4 px-1">
+                    <tr key={itemId} className="border-b border-gray-100 hover:bg-gray-50/30 transition-colors">
+                      <td className="flex items-center gap-4 py-6 px-6 border-r border-gray-100">
                         <div>
                           <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
                             <Image
@@ -75,8 +76,8 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
-                      <td className="py-4 md:px-4 px-1">
+                      <td className="py-6 px-6 text-gray-800 font-medium border-r border-gray-100">${product.offerPrice}</td>
+                      <td className="py-6 px-6 border-r border-gray-100">
                         <div className="flex items-center md:gap-2 gap-1">
                           <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
                             <Image
@@ -95,7 +96,7 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
+                      <td className="py-6 px-6 text-gray-800 font-semibold">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
                     </tr>
                   );
                 })}
@@ -111,8 +112,11 @@ const Cart = () => {
             Continue Shopping
           </button>
         </div>
-        <OrderSummary />
+        <div className="-mx-6 md:mx-0 md:mt-16">
+          <OrderSummary />
+        </div>
       </div>
+      <Footer />
     </>
   );
 };
