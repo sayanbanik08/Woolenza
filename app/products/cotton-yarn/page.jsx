@@ -19,11 +19,11 @@ const CottonYarnPage = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-32 py-8">
+      <div className="max-w-screen-xl mx-auto px-6 md:px-16 lg:px-32 py-8">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-medium mb-8">
           Cotton <span className="text-orange-600">Yarn</span>
         </h1>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-4 md:gap-6 justify-items-center">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product, index) => (
               <ProductCard key={index} product={product} />
