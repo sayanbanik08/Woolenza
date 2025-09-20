@@ -1,4 +1,5 @@
 import { inngest } from "@/config/inngest";
+import connectDB from "@/config/db";
 import Product from "@/models/Product";
 import { getAuth } from "@clerk/nextjs/server";
 import User from "@/models/user";
@@ -6,6 +7,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
     try {
+        await connectDB();
 
         const { userId } = getAuth(request);
         const { address, items } = await request.json();

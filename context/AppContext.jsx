@@ -123,11 +123,27 @@ export const AppContextProvider = (props) => {
         let totalAmount = 0;
         for (const items in cartItems) {
             let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
+            if (cartItems[items] > 0 && itemInfo) {
                 totalAmount += itemInfo.offerPrice * cartItems[items];
             }
         }
         return Math.floor(totalAmount * 100) / 100;
+    }
+
+    const getShippingFee = () => {
+        let totalShipping = 0;
+        for (const items in cartItems) {
+            let itemInfo = products.find((product) => product._id === items);
+            if (cartItems[items] > 0 && itemInfo) {
+                const shippingFee = itemInfo.shippingFee || 0;
+                totalShipping += shippingFee;
+            }
+        }
+        return Math.floor(totalShipping * 100) / 100;
+    }
+
+    const getTotalAmount = () => {
+        return Math.floor((getCartAmount() + getShippingFee()) * 100) / 100;
     }
 
     useEffect(() => {
@@ -148,7 +164,7 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount,
+        getCartCount, getCartAmount, getShippingFee, getTotalAmount,
         showSearch, setShowSearch
     }
 

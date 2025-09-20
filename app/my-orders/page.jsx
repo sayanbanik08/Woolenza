@@ -59,7 +59,7 @@ const MyOrders = () => {
                                     />
                                     <p className="flex flex-col gap-3">
                                         <span className="font-medium text-base">
-                                            {order.items.map((item) => item.product.name + ` x ${item.quantity}`).join(", ")}
+                                            {order.items.map((item) => item.product?.name ? item.product.name + ` x ${item.quantity}` : 'Product unavailable').join(", ")}
                                         </span>
                                         <span>Items : {order.items.length}</span>
                                     </p>
@@ -80,6 +80,13 @@ const MyOrders = () => {
                                     <p className="flex flex-col">
                                         <span>Method : COD</span>
                                         <span>Date : {new Date(order.date).toLocaleDateString()}</span>
+                                        <span className={`font-medium ${
+                                            order.status === 'Delivered' ? 'text-green-600' : 
+                                            order.status === 'Under Shipment' ? 'text-blue-600' : 'text-orange-600'
+                                        }`}>
+                                            {order.status === 'Delivered' ? 'Product is delivered' : 
+                                             order.status === 'Under Shipment' ? 'Under Shipment' : 'Order placed'}
+                                        </span>
                                     </p>
                                 </div>
                             </div>

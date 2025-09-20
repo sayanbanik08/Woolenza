@@ -10,15 +10,22 @@ const AddProduct = () => {
 
   const { getToken } = useAppContext();
 
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([null]);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Cotton Yarn');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const [shippingFee, setShippingFee] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const validFiles = files.filter(file => file !== null);
+    if (validFiles.length === 0) {
+      toast.error('Please upload at least one product image');
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', name);
@@ -26,9 +33,10 @@ const AddProduct = () => {
     formData.append('category', category);
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
+    formData.append('shippingFee', shippingFee);
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append('images', files[i]);
+    for (let i = 0; i < validFiles.length; i++) {
+      formData.append('images', validFiles[i]);
     }
 
     try {
@@ -37,12 +45,13 @@ const AddProduct = () => {
       const { data } = await axios.post('/api/product/add', formData, { headers: { Authorization: `Bearer ${token}` } });
       if (data.success) {
         toast.success(data.message);
-        setFiles([]);
+        setFiles([null]);
         setName('');
         setDescription('');
         setCategory('Cotton Yarn');
         setPrice('');
         setOfferPrice('');
+        setShippingFee('');
       } else {
         toast.error(data.message);
       }
@@ -60,8 +69,7 @@ const AddProduct = () => {
         <div>
           <p className="text-base font-medium">Product Image</p>
           <div className="flex flex-wrap items-center gap-3 mt-2">
-
-            {[...Array(4)].map((_, index) => (
+            {files.map((file, index) => (
               <label key={index} htmlFor={`image${index}`}>
                 <input onChange={(e) => {
                   const updatedFiles = [...files];
@@ -69,16 +77,27 @@ const AddProduct = () => {
                   setFiles(updatedFiles);
                 }} type="file" id={`image${index}`} hidden />
                 <Image
-                  key={index}
                   className="max-w-24 cursor-pointer"
-                  src={files[index] ? URL.createObjectURL(files[index]) : assets.upload_area}
+                  src={file ? URL.createObjectURL(file) : assets.upload_area}
                   alt=""
                   width={100}
                   height={100}
                 />
               </label>
             ))}
-
+            <button
+              type="button"
+              onClick={() => setFiles([...files, null])}
+              className="flex items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 transition-colors"
+            >
+              <Image
+                src={assets.add_icon}
+                alt="Add more images"
+                width={24}
+                height={24}
+                className="opacity-60"
+              />
+            </button>
           </div>
         </div>
         <div className="flex flex-col gap-1 max-w-md">
@@ -155,6 +174,20 @@ const AddProduct = () => {
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
               onChange={(e) => setOfferPrice(e.target.value)}
               value={offerPrice}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-1 w-32">
+            <label className="text-base font-medium" htmlFor="shipping-fee">
+              Shipping Fee
+            </label>
+            <input
+              id="shipping-fee"
+              type="number"
+              placeholder="0"
+              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+              onChange={(e) => setShippingFee(e.target.value)}
+              value={shippingFee}
               required
             />
           </div>
