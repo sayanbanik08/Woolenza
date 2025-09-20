@@ -24,6 +24,7 @@ export const AppContextProvider = (props) => {
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(false)
     const [cartItems, setCartItems] = useState({})
+    const [wishlist, setWishlist] = useState([])
     const [showSearch, setShowSearch] = useState(false)
 
     const fetchProductData = async () => {
@@ -48,16 +49,60 @@ export const AppContextProvider = (props) => {
             }
 
             const token = await getToken();
+            console.log('Fetching user data for:', user.id); // Debug log
+            
             const { data } = await axios.get('/api/user/data', { headers: { Authorization: `Bearer ${token}` } })
+            
+            console.log('User data response:', data); // Debug log
+            
             if (data.success) {
                 setUserData(data.user)
                 setCartItems(data.user.cartItems)
+                setWishlist(data.user.wishlist || [])
+                console.log('User wishlist loaded:', data.user.wishlist); // Debug log
             } else {
-                toast.error(data.message)
+                // If user not found, try to create the user
+                if (data.message === "User not found") {
+                    console.log('User not found, creating new user...');
+                    await createUser();
+                } else {
+                    console.error('Fetch user data error:', data.message);
+                    toast.error(data.message)
+                }
             }
 
         } catch (error) {
+            console.error('Fetch user data error:', error);
             toast.error(error.message)
+        }
+    }
+
+    const createUser = async () => {
+        try {
+            const token = await getToken();
+            const userData = {
+                name: user.fullName || user.firstName || 'User',
+                email: user.emailAddresses[0]?.emailAddress || '',
+                imageUrl: user.imageUrl || ''
+            };
+            
+            console.log('Creating user with data:', userData);
+            
+            const { data } = await axios.post('/api/user/create', userData, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            if (data.success) {
+                console.log('User created successfully');
+                // Fetch user data again after creation
+                await fetchUserData();
+            } else {
+                console.error('Create user error:', data.message);
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.error('Create user error:', error);
+            toast.error('Failed to create user account');
         }
     }
 
@@ -146,6 +191,36 @@ export const AppContextProvider = (props) => {
         return Math.floor((getCartAmount() + getShippingFee()) * 100) / 100;
     }
 
+    const toggleWishlist = async (productId) => {
+        if (!user) {
+            toast.error("Please login to add to wishlist")
+            return
+        }
+
+        try {
+            const token = await getToken();
+            console.log('Toggling wishlist for product:', productId); // Debug log
+            console.log('User ID:', user.id); // Debug log
+            
+            const { data } = await axios.post('/api/user/wishlist', { productId }, { 
+                headers: { Authorization: `Bearer ${token}` } 
+            })
+            
+            console.log('Wishlist API response:', data); // Debug log
+            
+            if (data.success) {
+                setWishlist(data.wishlist)
+                toast.success(data.message || (data.wishlist.includes(productId) ? "Added to wishlist" : "Removed from wishlist"))
+            } else {
+                console.error('Wishlist API error:', data.message);
+                toast.error(data.message || "Failed to update wishlist")
+            }
+        } catch (error) {
+            console.error('Wishlist toggle error:', error);
+            toast.error(error.response?.data?.message || error.message || "Failed to update wishlist")
+        }
+    }
+
     useEffect(() => {
         fetchProductData()
     }, [])
@@ -153,6 +228,11 @@ export const AppContextProvider = (props) => {
     useEffect(() => {
         if (user) {
             fetchUserData()
+        } else {
+            // Clear wishlist when user logs out
+            setWishlist([])
+            setCartItems({})
+            setUserData(false)
         }
     }, [user])
 
@@ -160,11 +240,12 @@ export const AppContextProvider = (props) => {
         user, getToken,
         currency, router,
         isSeller, setIsSeller,
-        userData, fetchUserData,
+        userData, fetchUserData, createUser,
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
         getCartCount, getCartAmount, getShippingFee, getTotalAmount,
+        wishlist, toggleWishlist,
         showSearch, setShowSearch
     }
 

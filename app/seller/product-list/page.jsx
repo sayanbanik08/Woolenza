@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const ProductList = () => {
 
-  const { router, getToken, user } = useAppContext()
+  const { router, getToken, user, currency } = useAppContext()
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -94,7 +94,7 @@ const ProductList = () => {
                           </span>
                         </div>
                         <div className="w-1/5 px-4 py-3">{product.category}</div>
-                        <div className="w-1/5 px-4 py-3">${product.offerPrice}</div>
+                        <div className="w-1/5 px-4 py-3">{currency}{product.offerPrice}</div>
                         <div className="w-1/5 px-4 py-3">
                           <div className="flex gap-2">
                             <button onClick={() => router.push(`/product/${product._id}`)} className="flex items-center gap-1 px-4 py-2.5 bg-orange-600 text-white rounded-md text-xs whitespace-nowrap">

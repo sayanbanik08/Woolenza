@@ -9,7 +9,7 @@ import { useAppContext } from "@/context/AppContext";
 
 const Cart = () => {
 
-  const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
+  const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount, currency } = useAppContext();
 
   return (
     <>
@@ -76,7 +76,7 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-6 px-6 text-gray-800 font-medium border-r border-gray-100">${product.offerPrice}</td>
+                      <td className="py-6 px-6 text-gray-800 font-medium border-r border-gray-100">{currency}{product.offerPrice}</td>
                       <td className="py-6 px-6 border-r border-gray-100">
                         <div className="flex items-center md:gap-2 gap-1">
                           <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
@@ -96,7 +96,7 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-6 px-6 text-gray-800 font-semibold">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
+                      <td className="py-6 px-6 text-gray-800 font-semibold">{currency}{(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
                     </tr>
                   );
                 })}

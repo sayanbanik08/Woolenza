@@ -46,6 +46,14 @@ const Navbar = () => {
           alt="search icon"
           onClick={() => setShowSearch(!showSearch)}
         />
+        {user && (
+          <Image 
+            className="w-4 h-4 cursor-pointer hover:opacity-70 transition" 
+            src={assets.heart_icon} 
+            alt="wishlist"
+            onClick={() => router.push('/wishlist')}
+          />
+        )}
         {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full md:hidden">Seller Dashboard</button>}
         {user
           ? <>
@@ -63,6 +71,7 @@ const Navbar = () => {
             </UserButton.MenuItems>
             <UserButton.MenuItems>
               <UserButton.Action label="cart" labelIcon={<CartIcon />} onClick={()=>router.push('/cart')} />
+              <UserButton.Action label="Wishlist" labelIcon={<Image src={assets.heart_icon} alt="heart" width={16} height={16} />} onClick={()=>router.push('/wishlist')} />
               <UserButton.Action label="My Orders" labelIcon={<BagIcon />} onClick={()=>router.push('/my-orders')} />
             </UserButton.MenuItems>
           </UserButton>
