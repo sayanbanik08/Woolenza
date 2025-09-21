@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const ProductList = () => {
 
-  const { router, getToken, user, currency } = useAppContext()
+  const { router, navigateWithLoading, getToken, user, currency, setIsLoading } = useAppContext()
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -33,6 +33,7 @@ const ProductList = () => {
   }
 
   const deleteProduct = async (productId) => {
+    setIsLoading(true)
     try {
       const token = await getToken();
       const { data } = await axios.delete(`/api/product/delete?id=${productId}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -44,6 +45,8 @@ const ProductList = () => {
       }
     } catch (error) {
       toast.error(error.message)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -97,7 +100,7 @@ const ProductList = () => {
                         <div className="w-1/5 px-4 py-3">{currency}{product.offerPrice}</div>
                         <div className="w-1/5 px-4 py-3">
                           <div className="flex gap-2">
-                            <button onClick={() => router.push(`/product/${product._id}`)} className="flex items-center gap-1 px-4 py-2.5 bg-orange-600 text-white rounded-md text-xs whitespace-nowrap">
+                            <button onClick={() => navigateWithLoading(`/product/${product._id}`)} className="flex items-center gap-1 px-4 py-2.5 bg-orange-600 text-white rounded-md text-xs whitespace-nowrap">
                               <span>Visit</span>
                               <Image
                                 className="h-3.5"

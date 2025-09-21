@@ -11,7 +11,7 @@ import { states, cities } from "@/data/locations";
 
 const AddAddress = () => {
 
-    const { getToken, router } = useAppContext();
+    const { getToken, router, setIsLoading } = useAppContext();
 
     const [address, setAddress] = useState({
         fullName: '',
@@ -43,6 +43,7 @@ const AddAddress = () => {
             return;
         }
 
+        setIsLoading(true)
         try {
             const token = await getToken();
             const { data } = await axios.post('/api/user/add-address', { address }, { headers: { Authorization: `Bearer ${token}` } });
@@ -54,6 +55,8 @@ const AddAddress = () => {
             }
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 

@@ -47,6 +47,9 @@ import bag from "./bag.png";
 import girl from "./girl.png";
 import boy from "./boy.png";
 import cat from "./cat.png";
+import gola from "./gola.png";
+import mat from "./mat.png";
+import woolelement from "./woolelement.png";
 import product_details_page_apple_earphone_image1 from "./product_details_page_apple_earphone_image1.png";
 import product_details_page_apple_earphone_image2 from "./product_details_page_apple_earphone_image2.png";
 import product_details_page_apple_earphone_image3 from "./product_details_page_apple_earphone_image3.png";
@@ -109,6 +112,9 @@ export const assets = {
   girl,
   boy,
   cat,
+  gola,
+  mat,
+  woolelement,
   woolenza_shop
 };
 

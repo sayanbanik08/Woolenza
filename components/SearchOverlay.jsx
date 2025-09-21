@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 
 const SearchOverlay = () => {
-  const { products, router, showSearch, setShowSearch } = useAppContext();
+  const { products, router, navigateWithLoading, showSearch, setShowSearch } = useAppContext();
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
 
@@ -18,7 +18,7 @@ const SearchOverlay = () => {
       );
       
       if (matchedProduct) {
-        router.push(`/product/${matchedProduct._id}`);
+        navigateWithLoading(`/product/${matchedProduct._id}`);
         setSearchQuery("");
         setShowSearch(false);
         setSuggestions([]);
@@ -42,7 +42,7 @@ const SearchOverlay = () => {
   };
 
   const handleSuggestionClick = (product) => {
-    router.push(`/product/${product._id}`);
+    navigateWithLoading(`/product/${product._id}`);
     setSearchQuery("");
     setShowSearch(false);
     setSuggestions([]);

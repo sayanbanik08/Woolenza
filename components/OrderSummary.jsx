@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 const OrderSummary = () => {
 
-  const { currency, router, getCartCount, getCartAmount, getShippingFee, getTotalAmount, getToken, user, cartItems, setCartItems } = useAppContext()
+  const { currency, router, navigateWithLoading, getCartCount, getCartAmount, getShippingFee, getTotalAmount, getToken, user, cartItems, setCartItems, setIsLoading } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -49,6 +49,7 @@ const OrderSummary = () => {
       if (cartItemsArray.length === 0) {
         return toast.error("Your cart is empty");
       }
+      setIsLoading(true)
       const token = await getToken();
       const { data } = await axios.post('/api/order/create', {
         address: selectedAddress._id,
@@ -59,14 +60,16 @@ const OrderSummary = () => {
       if (data.success) {
         toast.success(data.message);
         setCartItems({});
-        router.push('/order-placed');
+        navigateWithLoading('/order-placed');
       } else {
         toast.error(data.message);
+        setIsLoading(false)
       }
 
 
     } catch (error) {
       toast.error(error.message);
+      setIsLoading(false)
     }
   }
 
@@ -116,7 +119,7 @@ const OrderSummary = () => {
                   </li>
                 ))}
                 <li
-                  onClick={() => router.push("/add-address")}
+                  onClick={() => navigateWithLoading("/add-address")}
                   className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center"
                 >
                   + Add New Address

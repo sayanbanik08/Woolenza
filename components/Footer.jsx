@@ -1,8 +1,10 @@
 import React from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import { useAppContext } from "@/context/AppContext";
 
 const Footer = () => {
+  const { navigateWithLoading } = useAppContext();
   return (
     <footer>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between px-6 md:px-16 lg:px-32 gap-8 md:gap-10 py-10 md:py-14 border-b border-gray-500/30 text-gray-500">
@@ -20,16 +22,10 @@ const Footer = () => {
               <h2 className="font-medium text-gray-900 mb-3 md:mb-5">Company</h2>
               <ul className="text-sm space-y-2">
                 <li>
-                  <a className="hover:underline transition" href="#">Home</a>
+                  <button onClick={() => navigateWithLoading('/')} className="hover:underline transition">Home</button>
                 </li>
                 <li>
-                  <a className="hover:underline transition" href="#">About us</a>
-                </li>
-                <li>
-                  <a className="hover:underline transition" href="#">Contact us</a>
-                </li>
-                <li>
-                  <a className="hover:underline transition" href="#">Privacy policy</a>
+                  <a className="hover:underline transition" href="https://wa.me/919748482194" target="_blank" rel="noopener noreferrer">Contact us</a>
                 </li>
               </ul>
             </div>

@@ -8,7 +8,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const Control = () => {
-    const { getToken, user } = useAppContext();
+    const { getToken, user, setIsLoading } = useAppContext();
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -28,6 +28,7 @@ const Control = () => {
     }
 
     const clearUserCart = async (userId) => {
+        setIsLoading(true)
         try {
             const token = await getToken();
             const { data } = await axios.post('/api/user/clear-cart', 
@@ -44,6 +45,8 @@ const Control = () => {
             }
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -77,6 +80,7 @@ const Control = () => {
                                     <div className="flex flex-col gap-2">
                                         <span className="font-medium text-base">{userData.name}</span>
                                         <span className="text-gray-600">{userData.email}</span>
+                                        <span className="text-gray-600">{userData.phoneNumber}</span>
                                         <span className="text-sm text-gray-500">
                                             Cart Items: {Object.keys(userData.cartItems || {}).length}
                                         </span>

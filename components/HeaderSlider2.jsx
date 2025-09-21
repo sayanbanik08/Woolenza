@@ -4,29 +4,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppContext } from "@/context/AppContext";
 
-const HeaderSlider = () => {
+const HeaderSlider2 = () => {
   const { navigateWithLoading } = useAppContext();
   const sliderData = [
     {
       id: 1,
-      title: "Softness fades fast — claim your comfort.",
-      offer: "Going fast. Stay cozy.",
-      buttonText2: "Find more",
-      imgSrc: assets.girl,
+      title: "Soft doesn’t last — don’t miss it.",
+      offer: "Keep moving.  Stay soft.",
+      buttonText2: "Discover more",
+      imgSrc: assets.gola,
     },
     {
       id: 2,
-      title: "Limited threads, endless warmth — don’t miss out.",
-      offer: "Catch it before it unravels.",
-      buttonText2: "Explore Deals",
-      imgSrc: assets.boy,
+      title: "Limited drop, infinite comfort — claim yours.",
+      offer: "Hold it before it unthreads.",
+      buttonText2: "Browse Deals",
+      imgSrc: assets.mat,
     },
     {
       id: 3,
-      title: "When it’s gone, it’s just a memory in wool.",
-      offer: "Limited wool. Unlimited love.",
-      buttonText2: "Learn More",
-      imgSrc: assets.cat,
+      title: "When it fades, only the feel stays with you.",
+      offer: "Few made. Deeply loved.",
+      buttonText2: "Uncover More",
+      imgSrc: assets.woolelement,
     },
   ];
 
@@ -121,4 +121,4 @@ const HeaderSlider = () => {
   );
 };
 
-export default HeaderSlider;
+export default HeaderSlider2;

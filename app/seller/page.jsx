@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 const AddProduct = () => {
 
-  const { getToken } = useAppContext();
+  const { getToken, setIsLoading } = useAppContext();
 
   const [files, setFiles] = useState([null]);
   const [name, setName] = useState('');
@@ -39,6 +39,7 @@ const AddProduct = () => {
       formData.append('images', validFiles[i]);
     }
 
+    setIsLoading(true)
     try {
 
       const token = await getToken();
@@ -58,6 +59,8 @@ const AddProduct = () => {
 
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setIsLoading(false)
     }
 
 

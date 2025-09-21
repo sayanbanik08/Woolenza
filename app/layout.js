@@ -4,12 +4,16 @@ import { AppContextProvider } from "@/context/AppContext";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
 import SearchOverlay from "@/components/SearchOverlay";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 const outfit = Outfit({ subsets: ['latin'], weight: ["300", "400", "500"] })
 
 export const metadata = {
-  title: "QuickCart - GreatStack",
+  title: "Woolenza - Shop",
   description: "E-Commerce with Next.js ",
+  icons: {
+    icon: "/assets/woolenza_logo.png",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -20,6 +24,7 @@ export default function RootLayout({ children }) {
           <Toaster />
           <AppContextProvider>
             <SearchOverlay />
+            <LoadingOverlay />
             {children}
           </AppContextProvider>
         </body>

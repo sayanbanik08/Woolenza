@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const Orders = () => {
 
-    const { currency, getToken, user } = useAppContext();
+    const { currency, getToken, user, setIsLoading } = useAppContext();
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -38,6 +38,7 @@ const Orders = () => {
     }
 
     const deleteOrder = async (orderId) => {
+        setIsLoading(true)
         try {
             const token = await getToken();
             const { data } = await axios.delete(`/api/order/delete?id=${orderId}`, { headers: { Authorization: `Bearer ${token}` } });
@@ -61,10 +62,13 @@ const Orders = () => {
             }
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 
     const toggleDeliveryStatus = async (orderId, currentStatus) => {
+        setIsLoading(true)
         try {
             const newStatus = currentStatus === 'Delivered' ? 'Order placed' : 'Delivered';
             const token = await getToken();
@@ -84,10 +88,13 @@ const Orders = () => {
             }
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 
     const toggleShipmentStatus = async (orderId, currentStatus) => {
+        setIsLoading(true)
         try {
             let newStatus;
             if (currentStatus === 'Under Shipment') {
@@ -113,6 +120,8 @@ const Orders = () => {
             }
         } catch (error) {
             toast.error(error.message);
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -192,7 +201,7 @@ const Orders = () => {
                                         <br />
                                         <span >{order.address.area}</span>
                                         <br />
-                                        <span>{`${order.address.city}, ${order.address.state}`}</span>
+                                        <span>{`${order.address.city}, ${order.address.state} - ${order.address.pincode}`}</span>
                                         <br />
                                         <span>{order.address.phoneNumber}</span>
                                         <br />
@@ -204,7 +213,6 @@ const Orders = () => {
                                 <p className="font-medium my-auto">{currency}{order.amount}</p>
                                 <div>
                                     <p className="flex flex-col">
-                                        <span>Method : COD</span>
                                         <span>Date : {new Date(order.date).toLocaleDateString()}</span>
                                     </p>
                                 </div>

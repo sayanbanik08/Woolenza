@@ -3,9 +3,11 @@ import Link from 'next/link';
 import { assets } from '../../assets/assets';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { useAppContext } from '../../context/AppContext';
 
 const SideBar = () => {
     const pathname = usePathname()
+    const { navigateWithLoading } = useAppContext()
     const menuItems = [
         { name: 'Add Product', path: '/seller', icon: assets.add_icon },
         { name: 'Product List', path: '/seller/product-list', icon: assets.product_list_icon },
@@ -20,10 +22,11 @@ const SideBar = () => {
                 const isActive = pathname === item.path;
 
                 return (
-                    <Link href={item.path} key={item.name} passHref>
+                    <div key={item.name}>
                         <div
+                            onClick={() => navigateWithLoading(item.path)}
                             className={
-                                `flex items-center py-3 px-4 gap-3 ${isActive
+                                `flex items-center py-3 px-4 gap-3 cursor-pointer ${isActive
                                     ? "border-r-4 md:border-r-[6px] bg-orange-600/10 border-orange-500/90"
                                     : "hover:bg-gray-100/90 border-white"
                                 }`
@@ -36,7 +39,7 @@ const SideBar = () => {
                             />
                             <p className='md:block hidden text-center'>{item.name}</p>
                         </div>
-                    </Link>
+                    </div>
                 );
             })}
         </div>

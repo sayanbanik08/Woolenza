@@ -8,13 +8,13 @@ import { useClerk, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
 
-  const { isSeller, router, user, products, showSearch, setShowSearch } = useAppContext();
+  const { isSeller, router, navigateWithLoading, user, products, showSearch, setShowSearch } = useAppContext();
   const { openSignIn } = useClerk();
 
   return (
     <nav className="border-b border-gray-300 text-gray-700">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-16 lg:px-32 py-5 md:py-3">
-      <div className="cursor-pointer" onClick={() => router.push('/')}
+      <div className="cursor-pointer" onClick={() => navigateWithLoading('/')}
         role="button" aria-label="Home">
         <Image
           className="w-28 md:w-32"
@@ -25,17 +25,17 @@ const Navbar = () => {
         />
       </div>
       <div className="flex items-center gap-4 lg:gap-8 max-md:hidden">
-        <Link href="/" className="hover:text-gray-900 transition">
+        <button onClick={() => navigateWithLoading('/')} className="hover:text-gray-900 transition">
           Home
-        </Link>
-        <Link href="/" className="hover:text-gray-900 transition">
+        </button>
+        <button onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-gray-900 transition">
           About Us
-        </Link>
-        <Link href="/" className="hover:text-gray-900 transition">
+        </button>
+        <button onClick={() => document.querySelector('footer')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-gray-900 transition">
           Contact
-        </Link>
+        </button>
 
-        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
+        {isSeller && <button onClick={() => navigateWithLoading('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
 
       </div>
 
@@ -51,28 +51,28 @@ const Navbar = () => {
             className="w-4 h-4 cursor-pointer hover:opacity-70 transition" 
             src={assets.heart_icon} 
             alt="wishlist"
-            onClick={() => router.push('/wishlist')}
+            onClick={() => navigateWithLoading('/wishlist')}
           />
         )}
-        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full md:hidden">Seller Dashboard</button>}
+        {isSeller && <button onClick={() => navigateWithLoading('/seller')} className="text-xs border px-4 py-1.5 rounded-full md:hidden">Seller Dashboard</button>}
         {user
           ? <>
           <UserButton >
             <UserButton.MenuItems>
-              <UserButton.Action label="Home" labelIcon={<HomeIcon />} onClick={()=>router.push('/')} />
-              <UserButton.Action label="All Products" labelIcon={<BoxIcon />} onClick={()=>router.push('/all-products')} />
+              <UserButton.Action label="Home" labelIcon={<HomeIcon />} onClick={()=>navigateWithLoading('/')} />
+              <UserButton.Action label="All Products" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/all-products')} />
             </UserButton.MenuItems>
             <UserButton.MenuItems>
-              <UserButton.Action label="Cotton Yarn" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/cotton-yarn')} />
-              <UserButton.Action label="Chenile Yarn" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/chenile-yarn')} />
-              <UserButton.Action label="Pure Merino wool" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/pure-merino-wool')} />
-              <UserButton.Action label="Cotton and Acrylic Blend" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/cotton-acrylic-blend')} />
-              <UserButton.Action label="Acrylic Yarn" labelIcon={<BoxIcon />} onClick={()=>router.push('/products/acrylic-yarn')} />
+              <UserButton.Action label="Cotton Yarn" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/cotton-yarn')} />
+              <UserButton.Action label="Chenile Yarn" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/chenile-yarn')} />
+              <UserButton.Action label="Pure Merino wool" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/pure-merino-wool')} />
+              <UserButton.Action label="Cotton and Acrylic Blend" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/cotton-acrylic-blend')} />
+              <UserButton.Action label="Acrylic Yarn" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/acrylic-yarn')} />
             </UserButton.MenuItems>
             <UserButton.MenuItems>
-              <UserButton.Action label="cart" labelIcon={<CartIcon />} onClick={()=>router.push('/cart')} />
-              <UserButton.Action label="Wishlist" labelIcon={<Image src={assets.heart_icon} alt="heart" width={16} height={16} />} onClick={()=>router.push('/wishlist')} />
-              <UserButton.Action label="My Orders" labelIcon={<BagIcon />} onClick={()=>router.push('/my-orders')} />
+              <UserButton.Action label="cart" labelIcon={<CartIcon />} onClick={()=>navigateWithLoading('/cart')} />
+              <UserButton.Action label="Wishlist" labelIcon={<Image src={assets.heart_icon} alt="heart" width={16} height={16} />} onClick={()=>navigateWithLoading('/wishlist')} />
+              <UserButton.Action label="My Orders" labelIcon={<BagIcon />} onClick={()=>navigateWithLoading('/my-orders')} />
             </UserButton.MenuItems>
           </UserButton>
           </> 

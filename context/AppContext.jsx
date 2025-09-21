@@ -26,6 +26,7 @@ export const AppContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({})
     const [wishlist, setWishlist] = useState([])
     const [showSearch, setShowSearch] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const fetchProductData = async () => {
         try {
@@ -197,6 +198,7 @@ export const AppContextProvider = (props) => {
             return
         }
 
+        setIsLoading(true)
         try {
             const token = await getToken();
             console.log('Toggling wishlist for product:', productId); // Debug log
@@ -218,6 +220,8 @@ export const AppContextProvider = (props) => {
         } catch (error) {
             console.error('Wishlist toggle error:', error);
             toast.error(error.response?.data?.message || error.message || "Failed to update wishlist")
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -236,9 +240,15 @@ export const AppContextProvider = (props) => {
         }
     }, [user])
 
+    const navigateWithLoading = (path) => {
+        setIsLoading(true)
+        router.push(path)
+        setTimeout(() => setIsLoading(false), 800)
+    }
+
     const value = {
         user, getToken,
-        currency, router,
+        currency, router, navigateWithLoading,
         isSeller, setIsSeller,
         userData, fetchUserData, createUser,
         products, fetchProductData,
@@ -246,7 +256,8 @@ export const AppContextProvider = (props) => {
         addToCart, updateCartQuantity,
         getCartCount, getCartAmount, getShippingFee, getTotalAmount,
         wishlist, toggleWishlist,
-        showSearch, setShowSearch
+        showSearch, setShowSearch,
+        isLoading, setIsLoading
     }
 
     return (
