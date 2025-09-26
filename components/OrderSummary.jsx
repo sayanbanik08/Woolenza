@@ -4,6 +4,7 @@ import axios from "axios";
 import { set } from "mongoose";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import Script from "next/script";
 
 const OrderSummary = () => {
 
@@ -37,9 +38,8 @@ const OrderSummary = () => {
     setIsDropdownOpen(false);
   };
 
-  const createOrder = async () => {
+  const handlePayment = async () => {
     try {
-
       if (!selectedAddress) {
         return toast.error("Please select an address");
       }
@@ -49,29 +49,87 @@ const OrderSummary = () => {
       if (cartItemsArray.length === 0) {
         return toast.error("Your cart is empty");
       }
-      setIsLoading(true)
-      const token = await getToken();
-      const { data } = await axios.post('/api/order/create', {
-        address: selectedAddress._id,
-        items: cartItemsArray
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
+
+      setIsLoading(true);
+      
+      // Create Razorpay order
+      const { data: orderData } = await axios.post('/api/payment/create-order', {
+        amount: getTotalAmount(),
+        currency: 'INR'
       });
-      if (data.success) {
-        toast.success(data.message);
-        setCartItems({});
-        navigateWithLoading('/order-placed');
-      } else {
-        toast.error(data.message);
-        setIsLoading(false)
+
+      if (!orderData.success) {
+        toast.error(orderData.message);
+        setIsLoading(false);
+        return;
       }
 
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: orderData.order.amount,
+        currency: orderData.order.currency,
+        name: 'Woolenza',
+        description: 'Order Payment',
+        order_id: orderData.order.id,
+        handler: async function (response) {
+          try {
+            // Verify payment
+            const { data: verifyData } = await axios.post('/api/payment/verify', {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            });
+
+            if (verifyData.success) {
+              // Create order after successful payment
+              const token = await getToken();
+              const { data } = await axios.post('/api/order/create', {
+                address: selectedAddress._id,
+                items: cartItemsArray,
+                paymentId: response.razorpay_payment_id
+              }, {
+                headers: { Authorization: `Bearer ${token}` }
+              });
+
+              if (data.success) {
+                toast.success('Payment successful! Order placed.');
+                setCartItems({});
+                navigateWithLoading('/order-placed');
+              } else {
+                toast.error(data.message);
+              }
+            } else {
+              toast.error('Payment verification failed');
+            }
+          } catch (error) {
+            toast.error('Payment verification failed');
+          } finally {
+            setIsLoading(false);
+          }
+        },
+        prefill: {
+          name: user?.fullName || '',
+          email: user?.emailAddresses?.[0]?.emailAddress || '',
+          contact: selectedAddress?.phoneNumber || ''
+        },
+        theme: {
+          color: '#ea580c'
+        },
+        modal: {
+          ondismiss: function() {
+            setIsLoading(false);
+          }
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
 
     } catch (error) {
       toast.error(error.message);
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (user) {
@@ -148,7 +206,11 @@ const OrderSummary = () => {
         </div>
       </div>
 
-      <button onClick={createOrder} className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700">
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="lazyOnload"
+      />
+      <button onClick={handlePayment} className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700">
         Place Order
       </button>
     </div>
