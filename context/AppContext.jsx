@@ -177,15 +177,9 @@ export const AppContextProvider = (props) => {
     }
 
     const getShippingFee = () => {
-        let totalShipping = 0;
-        for (const items in cartItems) {
-            let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0 && itemInfo) {
-                const shippingFee = itemInfo.shippingFee || 0;
-                totalShipping += shippingFee;
-            }
-        }
-        return Math.floor(totalShipping * 100) / 100;
+        // Check if cart has any items
+        const hasItems = Object.keys(cartItems).some(itemId => cartItems[itemId] > 0);
+        return hasItems ? 82 : 0;
     }
 
     const getTotalAmount = () => {

@@ -18,18 +18,17 @@ export async function POST(request) {
 
         // calculate subtotal and shipping fee using items
         let subtotal = 0;
-        let shippingFee = 0;
         for (const item of items) {
             const product = await Product.findById(item.product);
             if (!product) {
                 return NextResponse.json({ success: false, message: `Product not found: ${item.product}` });
             }
             subtotal += product.offerPrice * item.quantity;
-            shippingFee += (product.shippingFee || 0);
         }
         // round to 2 decimals
         subtotal = Math.round(subtotal * 100) / 100;
-        shippingFee = Math.round(shippingFee * 100) / 100;
+        // hardcoded shipping fee for all orders
+        const shippingFee = items.length > 0 ? 82 : 0;
         const total = Math.round((subtotal + shippingFee) * 100) / 100;
 
         await inngest.send({

@@ -29,11 +29,8 @@ export async function POST(request) {
         const description = formData.get('description');
         const price = formData.get('price');
         const offerPrice = formData.get('offerPrice');
-        const shippingFee = formData.get('shippingFee') || '0';
         const category = formData.get('category');
         const files = formData.getAll('images');
-
-        console.log('Shipping Fee received:', shippingFee, 'Converted:', Number(shippingFee));
 
         if (!files || files.length === 0) {
             return NextResponse.json({ success: false, message: 'no files uploaded' });
@@ -69,7 +66,7 @@ export async function POST(request) {
             category,
             price: Number(price),
             offerPrice: Number(offerPrice),
-            shippingFee: Number(shippingFee),
+            shippingFee: 0,
             image,
             date: Date.now()
         });

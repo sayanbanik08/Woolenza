@@ -16,7 +16,7 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Cotton Yarn');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
-  const [shippingFee, setShippingFee] = useState('');
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ const AddProduct = () => {
     formData.append('category', category);
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
-    formData.append('shippingFee', shippingFee);
+
 
     for (let i = 0; i < validFiles.length; i++) {
       formData.append('images', validFiles[i]);
@@ -52,7 +52,7 @@ const AddProduct = () => {
         setCategory('Cotton Yarn');
         setPrice('');
         setOfferPrice('');
-        setShippingFee('');
+
       } else {
         toast.error(data.message);
       }
@@ -180,20 +180,7 @@ const AddProduct = () => {
               required
             />
           </div>
-          <div className="flex flex-col gap-1 w-32">
-            <label className="text-base font-medium" htmlFor="shipping-fee">
-              Shipping Fee
-            </label>
-            <input
-              id="shipping-fee"
-              type="number"
-              placeholder="0"
-              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setShippingFee(e.target.value)}
-              value={shippingFee}
-              required
-            />
-          </div>
+
         </div>
         <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
           ADD
