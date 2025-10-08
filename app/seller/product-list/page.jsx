@@ -99,8 +99,8 @@ const ProductList = () => {
                         <div className="w-1/5 px-4 py-3">{product.category}</div>
                         <div className="w-1/5 px-4 py-3">{currency}{product.offerPrice}</div>
                         <div className="w-1/5 px-4 py-3">
-                          <div className="flex gap-2">
-                            <button onClick={() => navigateWithLoading(`/product/${product._id}`)} className="flex items-center gap-1 px-4 py-2.5 bg-orange-600 text-white rounded-md text-xs whitespace-nowrap">
+                          <div className="flex gap-1 flex-wrap">
+                            <button onClick={() => navigateWithLoading(`/product/${product._id}`)} className="flex items-center gap-1 px-3 py-2 bg-orange-600 text-white rounded-md text-xs whitespace-nowrap">
                               <span>Visit</span>
                               <Image
                                 className="h-3.5"
@@ -108,7 +108,10 @@ const ProductList = () => {
                                 alt="redirect_icon"
                               />
                             </button>
-                            <button onClick={() => deleteProduct(product._id)} className="px-4 py-2.5 bg-red-600 text-white rounded-md text-xs whitespace-nowrap">
+                            <button onClick={() => navigateWithLoading(`/seller/edit?id=${product._id}`)} className="px-3 py-2 bg-blue-600 text-white rounded-md text-xs whitespace-nowrap">
+                              Edit
+                            </button>
+                            <button onClick={() => deleteProduct(product._id)} className="px-3 py-2 bg-red-600 text-white rounded-md text-xs whitespace-nowrap">
                               Delete
                             </button>
                           </div>
