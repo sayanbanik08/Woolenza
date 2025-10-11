@@ -25,7 +25,7 @@ const Footer = () => {
                   <button onClick={() => navigateWithLoading('/')} className="hover:underline transition">Home</button>
                 </li>
                 <li>
-                  <a className="hover:underline transition" href="https://wa.me/919748482194" target="_blank" rel="noopener noreferrer">Contact us</a>
+                  <a className="hover:underline transition" href="https://wa.me/918910792214" target="_blank" rel="noopener noreferrer">Contact us</a>
                 </li>
               </ul>
             </div>
@@ -35,7 +35,7 @@ const Footer = () => {
             <div>
               <h2 className="font-medium text-gray-900 mb-3 md:mb-5">Get in touch</h2>
               <div className="text-sm space-y-2">
-                <p>+91 9748482194</p>
+                <p>+91 8910792214</p>
               </div>
             </div>
           </div>
