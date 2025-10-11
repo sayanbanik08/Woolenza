@@ -42,6 +42,9 @@ const Footer = () => {
         </div>
       </div>
       <div className="max-w-7xl mx-auto">
+        <h3 className="pt-4 text-center text-sm md:text-base font-medium text-gray-900">
+          Woolenza - Powered by Royaall Wool
+        </h3>
         <p className="py-4 text-center text-xs md:text-sm">
           Copyright 2025 © Woolenza All Right Reserved.
         </p>
