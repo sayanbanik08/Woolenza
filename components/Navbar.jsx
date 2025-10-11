@@ -68,6 +68,12 @@ const Navbar = () => {
               <UserButton.Action label="Pure Merino wool" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/pure-merino-wool')} />
               <UserButton.Action label="Cotton and Acrylic Blend" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/cotton-acrylic-blend')} />
               <UserButton.Action label="Acrylic Yarn" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/acrylic-yarn')} />
+              <UserButton.Action label="Acrylic Rainbow" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/acrylic-rainbow')} />
+              <UserButton.Action label="MultiTone Acrylic" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/multitone-acrylic')} />
+              <UserButton.Action label="CloudCotton" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/cloudcotton')} />
+              <UserButton.Action label="Aroma Cotton" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/aroma-cotton')} />
+              <UserButton.Action label="TwistTone Cotton" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/twisttone-cotton')} />
+              <UserButton.Action label="Exclusive Acrylic" labelIcon={<BoxIcon />} onClick={()=>navigateWithLoading('/products/exclusive-acrylic')} />
             </UserButton.MenuItems>
             <UserButton.MenuItems>
               <UserButton.Action label="cart" labelIcon={<CartIcon />} onClick={()=>navigateWithLoading('/cart')} />

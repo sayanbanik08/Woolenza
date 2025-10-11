@@ -223,6 +223,12 @@ const EditProduct = () => {
               <option value="Pure Merino wool">Pure Merino wool</option>
               <option value="Cotton and Acrylic Blend">Cotton and Acrylic Blend</option>
               <option value="Acrylic Yarn">Acrylic Yarn</option>
+              <option value="Acrylic Rainbow">Acrylic Rainbow</option>
+              <option value="MultiTone Acrylic">MultiTone Acrylic</option>
+              <option value="CloudCotton">CloudCotton</option>
+              <option value="Aroma Cotton">Aroma Cotton</option>
+              <option value="TwistTone Cotton">TwistTone Cotton</option>
+              <option value="Exclusive Acrylic">Exclusive Acrylic</option>
             </select>
           </div>
           
