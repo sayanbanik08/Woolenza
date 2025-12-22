@@ -1,3 +1,5 @@
+import { NextResponse } from 'next/server';
+
 export async function POST(request) {
   try {
     const { amount, currency = 'INR' } = await request.json();
