@@ -126,7 +126,9 @@ const OrderSummary = () => {
       rzp.open();
 
     } catch (error) {
-      toast.error(error.message);
+      // Show better error message when axios returns a response body
+      const serverMessage = error.response?.data?.message;
+      toast.error(serverMessage || error.message);
       setIsLoading(false);
     }
   };

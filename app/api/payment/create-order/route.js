@@ -20,6 +20,8 @@ export async function POST(request) {
     
     return NextResponse.json({ success: true, order });
   } catch (error) {
+    // Log full error on the server to help debugging
+    console.error('Create-order error:', error);
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
