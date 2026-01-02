@@ -10,10 +10,10 @@ const WhatsAppFloat = () => {
         
         @keyframes slideText {
           0% {
-            transform: translateX(-100vw);
+            transform: translateX(100vw);
           }
           100% {
-            transform: translateX(100vw);
+            transform: translateX(-100vw);
           }
         }
         .animate-slide-content {
