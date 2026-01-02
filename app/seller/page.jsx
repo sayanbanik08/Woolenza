@@ -11,6 +11,7 @@ const AddProduct = () => {
   const { getToken, setIsLoading } = useAppContext();
 
   const [files, setFiles] = useState([null]);
+  const [showColoredProducts, setShowColoredProducts] = useState(false);
   const [coloredProducts, setColoredProducts] = useState([
     { shades: '', description: '', images: [null] }
   ]);
@@ -38,8 +39,13 @@ const AddProduct = () => {
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
 
-    // Prepare colored products data
-    const coloredProductsData = coloredProducts.map(product => ({
+    // Prepare colored products data - only if toggle is ON
+    const coloredProductsToSend = showColoredProducts 
+      ? coloredProducts
+        .filter(product => product.shades.trim() !== '' && product.description.trim() !== '' && product.images.some(img => img !== null))
+      : [];
+    
+    const coloredProductsData = coloredProductsToSend.map(product => ({
       shades: product.shades,
       description: product.description,
       images: product.images.filter(img => img !== null).map(img => URL.createObjectURL(img))
@@ -51,7 +57,7 @@ const AddProduct = () => {
     }
 
     // Add colored product images
-    coloredProducts.forEach((product, idx) => {
+    coloredProductsToSend.forEach((product, idx) => {
       product.images.forEach((img, imgIdx) => {
         if (img !== null) {
           formData.append(`coloredImage-${idx}-${imgIdx}`, img);
@@ -225,7 +231,28 @@ const AddProduct = () => {
 
         </div>
 
-        {coloredProducts.map((product, prodIndex) => (
+        <div className="flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setShowColoredProducts(!showColoredProducts);
+              if (!showColoredProducts && coloredProducts.length === 0) {
+                setColoredProducts([{ shades: '', description: '', images: [null] }]);
+              }
+            }}
+            className={`px-6 py-2 rounded text-white font-medium transition ${
+              showColoredProducts
+                ? 'bg-red-500 hover:bg-red-600'
+                : 'bg-orange-500 hover:bg-orange-600'
+            }`}
+          >
+            {showColoredProducts ? 'Turn Off Colored Products' : 'Add Colored Products'}
+          </button>
+        </div>
+
+        {showColoredProducts && (
+          <>
+            {coloredProducts.map((product, prodIndex) => (
           <div key={prodIndex} className="border-2 border-gray-400 p-6 space-y-5 relative">
             {/* Plus Icon */}
             <button
@@ -328,6 +355,8 @@ const AddProduct = () => {
             )}
           </div>
         ))}
+          </>
+        )}
 
         <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
           ADD

@@ -11,6 +11,7 @@ const EditProduct = () => {
   const { getToken, setIsLoading, router } = useAppContext();
   const [productId, setProductId] = useState('');
   const [files, setFiles] = useState([]);
+  const [showColoredProducts, setShowColoredProducts] = useState(false);
   const [coloredProducts, setColoredProducts] = useState([
     { shades: '', description: '', images: [], existingImages: [] }
   ]);
@@ -77,8 +78,10 @@ const EditProduct = () => {
             // Set colored products if any exist, otherwise empty default
             if (relatedColoredProducts.length > 0) {
               setColoredProducts(relatedColoredProducts);
+              setShowColoredProducts(true); // Show colored products section by default
             } else {
               setColoredProducts([{ shades: '', description: '', images: [], existingImages: [] }]);
+              setShowColoredProducts(false); // Hide colored products section by default
             }
           }
         }
@@ -112,6 +115,7 @@ const EditProduct = () => {
         await axios.delete(`/api/product/delete?id=${productToRemove.productId}`, { 
           headers: { Authorization: `Bearer ${token}` } 
         });
+        toast.success('Color variant deleted successfully');
       } catch (error) {
         toast.error('Failed to delete colored product');
         return;
@@ -120,6 +124,7 @@ const EditProduct = () => {
     
     // Remove from state
     setColoredProducts(coloredProducts.filter((_, i) => i !== prodIndex));
+    toast.success('Color variant removed from form');
   };
 
   const handleSubmit = async (e) => {
@@ -378,8 +383,31 @@ const EditProduct = () => {
           </div>
         </div>
 
-        {coloredProducts.map((product, prodIndex) => (
-          <div key={prodIndex} className="border-2 border-gray-400 p-6 space-y-5 relative">
+        {/* Colored Products Toggle Button */}
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setShowColoredProducts(!showColoredProducts);
+              if (!showColoredProducts && coloredProducts.length === 0) {
+                setColoredProducts([{ shades: '', description: '', images: [], existingImages: [] }]);
+              }
+            }}
+            className={`px-6 py-2 rounded text-white font-medium transition ${
+              showColoredProducts
+                ? 'bg-red-500 hover:bg-red-600'
+                : 'bg-orange-500 hover:bg-orange-600'
+            }`}
+          >
+            {showColoredProducts ? 'Turn Off Colored Products' : 'Add Colored Products'}
+          </button>
+        </div>
+
+        {/* Colored Products Section */}
+        {showColoredProducts && (
+          <>
+            {coloredProducts.map((product, prodIndex) => (
+              <div key={prodIndex} className="border-2 border-gray-400 p-6 space-y-5 relative">
             {/* Plus Icon */}
             <button
               type="button"
@@ -506,17 +534,17 @@ const EditProduct = () => {
             </div>
 
             {/* Delete Button */}
-            {coloredProducts.length > 1 && (
-              <button
-                type="button"
-                onClick={() => removeColoredProduct(prodIndex)}
-                className="mt-3 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded"
-              >
-                Remove This Color
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => removeColoredProduct(prodIndex)}
+              className="mt-3 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded"
+            >
+              Remove This Color
+            </button>
           </div>
-        ))}
+            ))}
+          </>
+        )}
 
         <div className="flex gap-3">
           <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
