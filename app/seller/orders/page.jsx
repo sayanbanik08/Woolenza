@@ -185,13 +185,28 @@ const Orders = () => {
                                 <div className="flex-1 flex gap-5 max-w-80">
                                     <Image
                                         className="max-w-16 max-h-16 object-cover"
-                                        src={assets.box_icon}
-                                        alt="box_icon"
+                                        src={order.items[0]?.product?.image?.[0] || assets.box_icon}
+                                        alt={order.items[0]?.product?.name || "product"}
+                                        width={64}
+                                        height={64}
                                     />
                                     <p className="flex flex-col gap-3">
                                         <span className="font-medium">
-                                            {order.items.map((item) => item.product?.name ? item.product.name + ` x ${item.quantity}` : 'Product unavailable').join(", ")}
+                                            {order.items.map((item) => {
+                                                if (!item.product?.name) return 'Product unavailable';
+                                                const productName = item.product.name;
+                                                return `${productName} x ${item.quantity}`;
+                                            }).join(", ")}
                                         </span>
+                                        {order.items.some(item => item.product?.shade?.name || item.product?.baseColor) && (
+                                            <span className="text-sm text-gray-600">
+                                                {order.items.map((item) => {
+                                                    if (item.product?.shade?.name) return `color: ${item.product.shade.name}`;
+                                                    if (item.product?.baseColor) return `color: ${item.product.baseColor}`;
+                                                    return null;
+                                                }).filter(Boolean).join(", ")}
+                                            </span>
+                                        )}
                                         <span>Items : {order.items.length}</span>
                                     </p>
                                 </div>
