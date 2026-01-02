@@ -41,6 +41,15 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-32 py-6">
+        <button
+          onClick={() => window.open('https://wa.me/918910792214', '_blank')}
+          className="w-full bg-transparent border-2 border-green-700 text-green-700 hover:bg-green-700 hover:text-white font-medium py-3 transition-all duration-300 flex items-center justify-center gap-2"
+        >
+          <i className="fab fa-whatsapp text-xl"></i>
+          Chat with us on WhatsApp
+        </button>
+      </div>
       <div className="max-w-7xl mx-auto">
         <h3 className="pt-4 text-center text-sm md:text-base font-medium text-gray-900">
           Woolenza - Powered by Royaall Wool
