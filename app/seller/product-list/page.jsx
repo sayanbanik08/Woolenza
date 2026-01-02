@@ -77,7 +77,9 @@ const ProductList = () => {
               </tr>
             </thead>
             <tbody className="text-sm text-gray-500">
-              {products.map((product, index) => (
+              {products
+                .filter(product => !product.shade) // Only show base products
+                .map((product, index) => (
                 <tr key={index} className="border-t border-gray-500/20">
                   <td colSpan="4" className="p-0">
                     <div className="overflow-x-auto">

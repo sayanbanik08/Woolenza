@@ -11,8 +11,12 @@ const EditProduct = () => {
   const { getToken, setIsLoading, router } = useAppContext();
   const [productId, setProductId] = useState('');
   const [files, setFiles] = useState([]);
+  const [coloredProducts, setColoredProducts] = useState([
+    { shades: '', description: '', images: [], existingImages: [] }
+  ]);
   const [existingImages, setExistingImages] = useState([]);
   const [name, setName] = useState('');
+  const [baseColor, setBaseColor] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Cotton Yarn');
   const [price, setPrice] = useState('');
@@ -28,7 +32,7 @@ const EditProduct = () => {
     } else {
       router.push('/seller/product-list');
     }
-  }, []);
+  }, [router]);
 
   const fetchProduct = async (id) => {
     try {
@@ -39,11 +43,46 @@ const EditProduct = () => {
       if (data.success && data.products.length > 0) {
         const product = data.products[0];
         setName(product.name);
+        setBaseColor(product.baseColor || '');
         setDescription(product.description);
         setCategory(product.category);
         setPrice(product.price.toString());
         setOfferPrice(product.offerPrice.toString());
         setExistingImages(product.image);
+        
+        // Check if current product is a colored variant or base product
+        const isColoredProduct = product.shade !== null && product.shade !== undefined;
+        
+        if (isColoredProduct) {
+          // If editing a colored product, don't show the composite form
+          // Just show the colored product details alone
+          setColoredProducts([{ shades: '', description: '', images: [], existingImages: [] }]);
+        } else {
+          // If editing base product, fetch all related colored products
+          const { data: allProductsData } = await axios.get('/api/product/list', { 
+            headers: { Authorization: `Bearer ${token}` } 
+          });
+          
+          if (allProductsData.success) {
+            const relatedColoredProducts = allProductsData.products
+              .filter(p => p.name === product.name && p.category === product.category && p.price === product.price && p.shade)
+              .map(p => ({
+                shades: p.shade?.name || '',
+                description: p.shadeDescription || '',
+                images: [],
+                existingImages: p.image,
+                productId: p._id
+              }));
+            
+            // Set colored products if any exist, otherwise empty default
+            if (relatedColoredProducts.length > 0) {
+              setColoredProducts(relatedColoredProducts);
+            } else {
+              setColoredProducts([{ shades: '', description: '', images: [], existingImages: [] }]);
+            }
+          }
+        }
+        
         setLoading(false);
       } else {
         toast.error('Product not found');
@@ -63,6 +102,26 @@ const EditProduct = () => {
     setFiles(files.filter((_, i) => i !== index));
   };
 
+  const removeColoredProduct = async (prodIndex) => {
+    const productToRemove = coloredProducts[prodIndex];
+    
+    // If it's an existing product (has productId), delete it from database
+    if (productToRemove.productId) {
+      try {
+        const token = await getToken();
+        await axios.delete(`/api/product/delete?id=${productToRemove.productId}`, { 
+          headers: { Authorization: `Bearer ${token}` } 
+        });
+      } catch (error) {
+        toast.error('Failed to delete colored product');
+        return;
+      }
+    }
+    
+    // Remove from state
+    setColoredProducts(coloredProducts.filter((_, i) => i !== prodIndex));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -74,6 +133,7 @@ const EditProduct = () => {
     const formData = new FormData();
     formData.append('productId', productId);
     formData.append('name', name);
+    formData.append('baseColor', baseColor);
     formData.append('description', description);
     formData.append('category', category);
     formData.append('price', price);
@@ -82,6 +142,46 @@ const EditProduct = () => {
 
     files.forEach(file => {
       formData.append('images', file);
+    });
+
+    // Separate existing and new colored products
+    const existingColoredProducts = coloredProducts.filter(cp => cp.productId);
+    const newColoredProducts = coloredProducts.filter(cp => !cp.productId);
+
+    // Prepare existing colored products for update
+    const existingColoredProductsData = existingColoredProducts.map(product => ({
+      productId: product.productId,
+      shades: product.shades,
+      description: product.description,
+      existingImages: product.existingImages,
+      newImages: product.images.filter(img => img !== null)
+    }));
+    formData.append('existingColoredProducts', JSON.stringify(existingColoredProductsData));
+
+    // Prepare new colored products data
+    const newColoredProductsData = newColoredProducts.map(product => ({
+      shades: product.shades,
+      description: product.description,
+      images: product.images.filter(img => img !== null).map(img => URL.createObjectURL(img))
+    }));
+    formData.append('coloredProducts', JSON.stringify(newColoredProductsData));
+
+    // Add new colored product images
+    newColoredProducts.forEach((product, idx) => {
+      product.images.forEach((img, imgIdx) => {
+        if (img !== null) {
+          formData.append(`coloredImage-${idx}-${imgIdx}`, img);
+        }
+      });
+    });
+
+    // Add existing colored product new images
+    existingColoredProducts.forEach((product, idx) => {
+      product.images.forEach((img, imgIdx) => {
+        if (img !== null) {
+          formData.append(`existingColoredImage-${idx}-${imgIdx}`, img);
+        }
+      });
     });
 
     setIsLoading(true);
@@ -109,7 +209,7 @@ const EditProduct = () => {
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
-      <form onSubmit={handleSubmit} className="md:p-10 p-4 space-y-5 max-w-lg">
+      <form key={productId} onSubmit={handleSubmit} className="md:p-10 p-4 space-y-5 max-w-lg">
         <h2 className="text-lg font-medium">Edit Product</h2>
         
         <div>
@@ -193,6 +293,21 @@ const EditProduct = () => {
         </div>
 
         <div className="flex flex-col gap-1 max-w-md">
+          <label className="text-base font-medium" htmlFor="base-color">
+            Base Color
+          </label>
+          <input
+            id="base-color"
+            type="text"
+            placeholder="Type here"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+            onChange={(e) => setBaseColor(e.target.value)}
+            value={baseColor}
+            required
+          />
+        </div>
+
+        <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-description">
             Product Description
           </label>
@@ -262,6 +377,146 @@ const EditProduct = () => {
             />
           </div>
         </div>
+
+        {coloredProducts.map((product, prodIndex) => (
+          <div key={prodIndex} className="border-2 border-gray-400 p-6 space-y-5 relative">
+            {/* Plus Icon */}
+            <button
+              type="button"
+              onClick={() => setColoredProducts([...coloredProducts, { shades: '', description: '', images: [], existingImages: [] }])}
+              className="absolute top-4 right-4 w-8 h-8 bg-orange-500 hover:bg-orange-600 text-white rounded flex items-center justify-center text-lg font-bold transition"
+              title="Add another colored product"
+            >
+              +
+            </button>
+
+            <div className="flex flex-col gap-1 w-full">
+              <label className="text-base font-medium" htmlFor={`choose-shade-${prodIndex}`}>
+                Choose a Shade
+              </label>
+              <input
+                id={`choose-shade-${prodIndex}`}
+                type="text"
+                placeholder="e.g., Red, Blue, Green..."
+                className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+                onChange={(e) => {
+                  const updated = [...coloredProducts];
+                  updated[prodIndex].shades = e.target.value;
+                  setColoredProducts(updated);
+                }}
+                value={product.shades}
+                required
+              />
+            </div>
+
+            <div className="flex flex-col gap-1 max-w-md">
+              <label
+                className="text-base font-medium"
+                htmlFor={`colored-product-description-${prodIndex}`}
+              >
+                Colored Product Description
+              </label>
+              <textarea
+                id={`colored-product-description-${prodIndex}`}
+                rows={4}
+                className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
+                placeholder="Type here"
+                onChange={(e) => {
+                  const updated = [...coloredProducts];
+                  updated[prodIndex].description = e.target.value;
+                  setColoredProducts(updated);
+                }}
+                value={product.description}
+                required
+              ></textarea>
+            </div>
+
+            <div>
+              <p className="text-base font-medium">Colored product Image</p>
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                {product.existingImages?.map((image, index) => (
+                  <div key={`existing-colored-${index}`} className="relative">
+                    <Image
+                      className="max-w-24 border rounded"
+                      src={image}
+                      alt=""
+                      width={100}
+                      height={100}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = [...coloredProducts];
+                        updated[prodIndex].existingImages = updated[prodIndex].existingImages.filter((_, i) => i !== index);
+                        setColoredProducts(updated);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                
+                {product.images?.map((file, index) => (
+                  <div key={`new-colored-${index}`} className="relative">
+                    <Image
+                      className="max-w-24 border rounded"
+                      src={URL.createObjectURL(file)}
+                      alt=""
+                      width={100}
+                      height={100}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = [...coloredProducts];
+                        updated[prodIndex].images = updated[prodIndex].images.filter((_, i) => i !== index);
+                        setColoredProducts(updated);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+
+                <label htmlFor={`colored-file-input-${prodIndex}`}>
+                  <input
+                    id={`colored-file-input-${prodIndex}`}
+                    type="file"
+                    hidden
+                    onChange={(e) => {
+                      if (e.target.files[0]) {
+                        const updated = [...coloredProducts];
+                        updated[prodIndex].images = [...(updated[prodIndex].images || []), e.target.files[0]];
+                        setColoredProducts(updated);
+                      }
+                    }}
+                  />
+                  <div className="flex items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 transition-colors cursor-pointer">
+                    <Image
+                      src={assets.add_icon}
+                      alt="Add image"
+                      width={24}
+                      height={24}
+                    />
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Delete Button */}
+            {coloredProducts.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeColoredProduct(prodIndex)}
+                className="mt-3 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded"
+              >
+                Remove This Color
+              </button>
+            )}
+          </div>
+        ))}
 
         <div className="flex gap-3">
           <button type="submit" className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded">
