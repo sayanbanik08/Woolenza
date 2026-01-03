@@ -13,10 +13,14 @@ const GreetingPopup = () => {
   const hour = new Date().getHours();
   let greeting = 'Good Morning';
   
-  if (hour >= 12 && hour < 18) {
+  if (hour >= 5 && hour < 12) {
+    greeting = 'Good Morning';
+  } else if (hour >= 12 && hour < 18) {
     greeting = 'Good Afternoon';
-  } else if (hour >= 18) {
+  } else if (hour >= 18 && hour < 21) {
     greeting = 'Good Evening';
+  } else {
+    greeting = 'Good Night';
   }
 
   // Calculate store age (established 14/5/1976)
@@ -69,7 +73,7 @@ const GreetingPopup = () => {
     if (currentTextIndex < textLines.length) {
       const timer = setTimeout(() => {
         setCurrentTextIndex(currentTextIndex + 1);
-      }, 2000); // Each text appears for 2 seconds
+      }, 4000); // Each text appears for 4 seconds
 
       return () => clearTimeout(timer);
     }
@@ -197,7 +201,7 @@ const GreetingPopup = () => {
           font-weight: 700;
           text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
           line-height: 1.2;
-          animation: fadeInText 0.8s ease-in;
+          animation: fadeInText 0.6s ease-in;
           color: #2d5a3d;
           font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
           letter-spacing: 0.5px;
@@ -209,7 +213,7 @@ const GreetingPopup = () => {
           opacity: 1;
           text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
           line-height: 1.3;
-          animation: fadeInText 0.8s ease-in;
+          animation: fadeInText 0.6s ease-in;
           color: #2d5a3d;
           font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
           letter-spacing: 0.3px;
@@ -232,7 +236,7 @@ const GreetingPopup = () => {
           font-weight: 600;
           font-size: 16px;
           opacity: 1;
-          animation: fadeInText 0.8s ease-in;
+          animation: fadeInText 0.6s ease-in;
           color: #2d5a3d;
           font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
           letter-spacing: 0.3px;
@@ -243,7 +247,7 @@ const GreetingPopup = () => {
           font-weight: 500;
           opacity: 1;
           line-height: 1.2;
-          animation: fadeInText 0.8s ease-in;
+          animation: fadeInText 0.6s ease-in;
           color: #2d5a3d;
           font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
           letter-spacing: 0.2px;
@@ -255,7 +259,7 @@ const GreetingPopup = () => {
           opacity: 1;
           margin-top: 4px;
           line-height: 1.3;
-          animation: fadeInText 0.8s ease-in;
+          animation: fadeInText 0.6s ease-in;
           color: #2d5a3d;
           font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
           letter-spacing: 0.3px;
@@ -266,7 +270,7 @@ const GreetingPopup = () => {
           font-weight: 600;
           opacity: 1;
           margin-top: 3px;
-          animation: fadeInText 0.8s ease-in;
+          animation: fadeInText 0.6s ease-in;
           color: #2d5a3d;
           font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
           letter-spacing: 0.3px;
