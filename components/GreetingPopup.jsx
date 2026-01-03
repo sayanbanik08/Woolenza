@@ -349,12 +349,12 @@ const GreetingPopup = () => {
         <div className="greeting-text">
           {currentTextIndex === 0 && <div className="greeting-main">{greeting}</div>}
           {currentTextIndex === 1 && <div className="greeting-sub">{customerName}!</div>}
-          {currentTextIndex === 2 && <div className="journey-line">From 1976 to today, we've spent</div>}
-          {currentTextIndex === 3 && <div className="journey-stat">💞 {storeAge.years}+ Years holding your trust</div>}
-          {currentTextIndex === 4 && <div className="journey-stat">🌸 {storeAge.totalDays.toLocaleString()} Days sharing smiles</div>}
-          {currentTextIndex === 5 && <div className="journey-stat">🕰 {storeAge.totalHours.toLocaleString()} Hours caring for you</div>}
+          {currentTextIndex === 2 && <div className="journey-line">From 1976 to today, we've spent.</div>}
+          {currentTextIndex === 3 && <div className="journey-stat">💞 {storeAge.years}+ Years holding your trust,</div>}
+          {currentTextIndex === 4 && <div className="journey-stat">🌸 {storeAge.totalDays.toLocaleString()} Days sharing smiles,</div>}
+          {currentTextIndex === 5 && <div className="journey-stat">🕰 {storeAge.totalHours.toLocaleString()} Hours caring for you.</div>}
           {currentTextIndex === 6 && <div className="journey-message">You're not just our customer…</div>}
-          {currentTextIndex === 7 && <div className="journey-message">you're our story 💖</div>}
+          {currentTextIndex === 7 && <div className="journey-message">you're our story. 💖</div>}
           {currentTextIndex === 8 && <div className="journey-cta">Explore our collections!</div>}
         </div>
       </div>
