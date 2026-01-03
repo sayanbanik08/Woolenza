@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import SearchOverlay from "@/components/SearchOverlay";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import BottomNav from "@/components/BottomNav";
 
 const outfit = Outfit({ subsets: ['latin'], weight: ["300", "400", "500"] })
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
             <LoadingOverlay />
             <WhatsAppFloat />
             {children}
+            <BottomNav />
           </AppContextProvider>
         </body>
       </html>

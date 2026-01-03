@@ -6,10 +6,12 @@ import HomeProducts from "@/components/HomeProducts";
 import Banner from "@/components/Banner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import GreetingPopup from "@/components/GreetingPopup";
 
 const Home = () => {
   return (
     <>
+      <GreetingPopup />
       <Navbar/>
       <div className="max-w-7xl mx-auto px-6 md:px-16 lg:px-32">
         <HeaderSlider />

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { assets, BagIcon, BoxIcon, CartIcon, HomeIcon } from "@/assets/assets";
 import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
@@ -10,6 +10,13 @@ const Navbar = () => {
 
   const { isSeller, router, navigateWithLoading, user, products, showSearch, setShowSearch } = useAppContext();
   const { openSignIn } = useClerk();
+  const [currentDate, setCurrentDate] = useState('');
+
+  useEffect(() => {
+    const today = new Date();
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
+    setCurrentDate(today.toLocaleDateString('en-US', options));
+  }, []);
 
   return (
     <nav className="border-b border-gray-300 text-gray-700">
@@ -40,20 +47,27 @@ const Navbar = () => {
       </div>
 
       <ul className="flex items-center gap-4">
+        {/* Desktop - Show search and wishlist */}
         <Image 
-          className="w-4 h-4 cursor-pointer hover:opacity-70 transition" 
+          className="w-4 h-4 cursor-pointer hover:opacity-70 transition max-md:hidden" 
           src={assets.search_icon} 
           alt="search icon"
           onClick={() => setShowSearch(!showSearch)}
         />
         {user && (
           <Image 
-            className="w-4 h-4 cursor-pointer hover:opacity-70 transition" 
+            className="w-4 h-4 cursor-pointer hover:opacity-70 transition max-md:hidden" 
             src={assets.heart_icon} 
             alt="wishlist"
             onClick={() => navigateWithLoading('/wishlist')}
           />
         )}
+        
+        {/* Mobile - Show modern date */}
+        <div className="md:hidden flex items-center justify-center text-sm font-medium text-gray-700">
+          {currentDate}
+        </div>
+        
         {isSeller && <button onClick={() => navigateWithLoading('/seller')} className="text-xs border px-4 py-1.5 rounded-full md:hidden">Seller Dashboard</button>}
         {user
           ? <>

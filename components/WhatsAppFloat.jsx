@@ -27,17 +27,7 @@ const WhatsAppFloat = () => {
           font-weight: 100;
         }
       `}</style>
-      <div
-        className="w-full bg-gradient-to-r from-green-500/30 to-emerald-500/30 backdrop-blur-md px-6 py-1 flex items-center justify-center text-green-700 overflow-hidden"
-        style={{
-          backgroundImage: 'linear-gradient(to bottom, rgba(34,197,94,0.3) 0%, rgba(34,197,94,0.3) 80%, rgba(34,197,94,0) 100%)'
-        }}
-      >
-        <div className="animate-slide-content">
-          <i className="fas fa-ball-of-yarn text-green-700" style={{ fontSize: '1.8rem' }}></i>
-          <span>Premium Quality Yarns & Wool – Crafted for Every Creative Project</span>
-        </div>
-      </div>
+
     </>
   );
 };
