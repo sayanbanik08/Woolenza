@@ -61,12 +61,12 @@ const GreetingPopup = () => {
     const textLines = [
       `${greeting}`,
       `${customerName}!`,
-      'From 1976 to today, we\'ve spent',
-      `💞 ${storeAge.years}+ Years holding your trust`,
-      `🌸 ${storeAge.totalDays.toLocaleString()} Days sharing smiles`,
-      `🕰 ${storeAge.totalHours.toLocaleString()} Hours caring for you`,
+      'From 1976 to today, we\'ve spent.',
+      `💞 ${storeAge.years}+ Years holding your trust,`,
+      `🌸 ${storeAge.totalDays.toLocaleString()} Days sharing smiles,`,
+      `🕰 ${storeAge.totalHours.toLocaleString()} Hours caring for you.`,
       'You\'re not just our customer…',
-      'you\'re our story 💖',
+      'you\'re our story. 💖',
       'Explore our collections!'
     ];
 
